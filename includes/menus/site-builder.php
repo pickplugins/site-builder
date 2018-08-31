@@ -34,12 +34,18 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             <div class="section">
                 <div class="sec-title">Column & Row</div>
                 <div class="sec-inner">
-                    <div class="add-row button" @click="addRow">Add Row</div>
-                    <div class="add-column button" @click="addColumn(selectedRow)">Add Column</div>
+                    <div class="add-container button" @click="addContainer">Add Container</div>
+                    <div class="add-row button" @click="addRow(selectedContainer)">Add Row</div>
+                    <div class="add-column button" @click="addColumn(selectedRow[0],selectedRow[1])">Add Column</div>
                 </div>
             </div>
 
             <div class="section">
+                <div class="sec-inner">
+                    <p>Container: {{selectedContainer}}</p>
+                    <p>Row: {{selectedRow}}</p>
+                    <p>Column: {{selectedColumn}}</p>
+                </div>
 
 
             </div>
@@ -50,33 +56,77 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
         <div  class="nav-preview">
 
 
+            <template class="" v-for="(container, i) in containers">
+                <div :index="i" :class="[container.class, container.margin, container.padding]" class="" @click="selectContainer(i)">
 
+                    <template class="" v-for="(row, j) in container.rows">
+                        <div :index="j" :class="[row.class, row.margin, row.padding]" @click="selectRow(i,j)">
+                            <div class="row-action">
+        <!--                        <div title="Delete Row" class="action-item sort"><i class="fas fa-bars"></i></div>-->
+                                <div title="Add Column" class="action-item add-column-local" @click="addColumn(i,j)"><i class="fas fa-columns"></i></div>
+                                <div title="Delete Row" class="action-item remove" @click="removeRow(j)" ><i class="fas fa-times"></i></div>
+                                <div title="Row Settings" class="action-item row-settings">
+                                    <i class="fas fa-cog"></i>
 
-            <template class="" v-for="(row, i) in rows" v-sortable="{ handle: '.sort' }">
-                <div :index="i" :class="row.class" @click="selectRow(i)"  >
-                    <div class="row-action">
-                        <span class="sort"><i class="fas fa-bars"></i></span>
-                        <span class="add-column-local" @click="addColumn(i)"><i class="fas fa-columns"></i></span>
-                        <span class="remove" @click="removeRow(i)" ><i class="fas fa-times"></i></span>
-                    </div>
+                                    <div class="row-settings-wrap">
+                                        <div class="input-wrap full">
+                                            <label>Row Class</label>
+                                            <input type="text" value="10px" v-model="row.class">
+                                        </div>
+                                        <div class="input-wrap half">
+                                            <label>Column Margin Class</label>
+                                            <input type="text" value="10px" v-model="row.margin">
+                                        </div>
+                                        <div class="input-wrap half">
+                                            <label>Column Padding Class</label>
+                                            <input type="text" value="10px" v-model="row.padding">
+                                        </div>
 
-                    <template class="" v-for="(column, j) in row.columns" >
-                        <div :index="j" :class="column.class" @click="selectColumn(i,j)" >
-                            <div class="col-action">
-                                <span class="sort"><i class="fas fa-bars"></i></span>
-                                <span class="remove" @click="removeColumn(i,j)" ><i class="fas fa-times"></i></span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3>{{ i }} : {{ j }}</h3>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.
 
+                            <template class="" v-for="(column, k) in row.columns" >
+                                <div :index="k" :class="[column.class, column.margin, column.padding]" @click="selectColumn(i,j,k)" >
+                                    <div class="col-action">
+        <!--                                <div class="sort action-item"><i class="fas fa-bars"></i></div>-->
+                                        <div title="Delete Column" class="remove action-item" @click="removeColumn(i,j,k)" ><i class="fas fa-times"></i></div>
+                                        <div title="Row Settings" class="action-item col-settings">
+                                            <i class="fas fa-cog"></i>
+
+                                            <div class="col-settings-wrap">
+                                                <div class="input-wrap full">
+                                                    <label>Column Class</label>
+                                                    <input type="text" value="10px" v-model="column.class">
+                                                </div>
+                                                <div class="input-wrap half">
+                                                    <label>Column Margin Class</label>
+                                                    <input type="text" value="10px" v-model="column.margin">
+                                                </div>
+                                                <div class="input-wrap half">
+                                                    <label>Column Padding Class</label>
+                                                    <input type="text" value="10px" v-model="column.padding">
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <h3>{{ i }} : {{ j }} : {{ k }}</h3>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.
+
+
+                                </div>
+
+                            </template>
 
                         </div>
+
 
                     </template>
 
                 </div>
-
-
             </template>
 
         </div>
@@ -100,15 +150,25 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 index:'',
             }],
 
-            selectedRow: 0,
-            selectedColumn: [{}],
+            selectedContainer: 0,
+            selectedRow: [0,0],
+            selectedColumn: [0,0,0],
 
-            rows: [{
-                class: 'sb-row row m-1',
-                columns: [{
-                    class: 'sb-col col m-1',
+            containers: [{
+                class: 'sb-container container py-1 my-1',
+                rows: [{
+                    class: 'sb-row row',
+                    margin: 'm-1',
+                    padding: 'p-1',
+                    columns: [{
+                        class: 'sb-col col',
+                        margin: 'm-1',
+                        padding: 'p-1',
+                        items: [{}],
 
-                }]
+                    }]
+
+                }],
 
             }],
 
@@ -125,79 +185,102 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
             },
 
-            addRow: function(){
+
+
+            addContainer: function(i){
 
 
 
-                this.rows.push({
-                    class: 'sb-row row m-1',
+
+                this.containers.push({
+                    class: 'sb-container container py-1 my-1',
+                    rows: [{
+                        class: 'sb-row row',
+                        margin: 'm-1',
+                        padding: 'p-1',
+                        columns: [{
+                            class: 'sb-col col',
+                            margin: 'm-1',
+                            padding: 'p-1',
+                            items: [{}],
+
+                        }]
+
+                    }],
+
+                })
+
+            },
+
+
+
+
+            addRow: function(i,j){
+
+                this.containers[i].rows.push({
+                    class: 'sb-row row',
+                    margin: 'm-1',
+                    padding: 'p-1',
                     columns: [{
-                        class: 'sb-col col m-1',
+                        class: 'sb-col col',
+                        margin: 'm-1',
+                        padding: 'p-1',
+                        items: [{}],
 
                     }]
 
                 })
 
             },
-            addColumn: function(i){
+            addColumn: function(i,j){
 
+                console.log(i);
+                console.log(j);
 
-            console.log(this.rows[this.selectedRow]);
+                this.containers[i].rows[j].columns.push({
 
-                this.rows[i].columns.push({
-
-                    class: 'sb-col col m-1',
+                    class: 'sb-col col',
+                    margin: 'm-1',
+                    padding: 'p-1',
+                    items: [{}],
 
                 })
+
+
+
+
+
+
             },
 
             getUniqueId: function(){
 
                 return new Date().getTime();
             },
-            selectRow: function(i){
 
-                this.selectedRow = i;
+            selectContainer: function(i){
 
-
+                this.selectedContainer = i;
             },
 
-            removeRow: function(i){
+            selectRow: function(i,j){
 
-                console.log(this.rows.splice(i, 1));
-
-
+                this.selectedRow = [i,j];;
             },
-            selectColumn: function(i,j){
 
-                console.log(this.selectedColumn);
+            removeRow: function(i,j){
+                this.containers[i].rows.splice(j, 1)
+            },
+            selectColumn: function(i,j,k){
 
-                this.selectedColumn = [{i,j}];
-
-                console.log(i);
-                console.log(j);
-
+                this.selectedColumn = [i,j,k];
             },
 
 
-            removeColumn: function(i,j){
-
-                console.log(this.rows[i].columns.splice(j, 1));
-                console.log(i);
-                console.log(j);
-
+            removeColumn: function(i,j,k){
+                this.containers[i].rows[j].columns.splice(k, 1)
             },
-
-
-
-
-
-
         }
-
-
-
-
 
     })
 </script>

@@ -1,7 +1,9 @@
 @charset "utf-8";
 /* CSS Document */
 
-.site-builder{}
+.site-builder{
+	margin-top: 60px;
+}
 
 .nav-tools{
 	width: 350px;
@@ -31,31 +33,49 @@
 	margin-left: 380px;
 }
 
+
+
+
+.nav-preview .sb-container{
+	background: #f1f1f1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .nav-preview .sb-row{
 	background: #ddd;
 	padding: 10px;
 	position: relative;
-	overflow: hidden;
 }
 
 
 .nav-preview .sb-row:hover .row-action{
-	top: 5px;
+	opacity: 1;
 }
 
 .nav-preview .sb-row .row-action{
 	position: absolute;
-	top: -100px;
-	left: 5px;
+	top: -35px;
+	left: 0px;
 	background: #eee;
 	padding: 5px;
-	/* display: none; */
-	 transition: all ease 1s 0s;
+	transition: all ease 0.7s 0s;
 	z-index: 999;
 	box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.14);
+	height: 35px;
+	opacity: 0;
 }
 
-.nav-preview .sb-row .row-action span{
+.nav-preview .sb-row .row-action .action-item{
 	display: inline-block;
 	background: #007bff;
 	padding: 3px 7px;
@@ -63,27 +83,67 @@
 	color: #fff;
 	font-size: 10px;
 	cursor: pointer;
+	position: relative;
 }
+
+.nav-preview .sb-row .row-action .row-settings-wrap{
+	width: 350px;
+	position: absolute;
+	top: 21px;
+	left: 0;
+	background: #007bff;
+	display: none;
+	padding: 7px;
+}
+
+.nav-preview .sb-row .row-settings:hover .row-settings-wrap{
+
+	display: block;
+}
+
+
+
+
+
 
 
 .nav-preview .sb-col .col-action{
 	position: absolute;
-	top: -100px;
-	right: 5px;
+	top: -35px;
+	right: 0;
 	background: #eee;
 	padding: 5px;
-	/* display: none; */
 	transition: all ease 1s 0s;
 	z-index: 999;
-	box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.14);
+	box-shadow: 0 -2px 3px 0px rgba(0, 0, 0, 0.14);
+	opacity: 0;
+	height: 35px;
 }
 
 .nav-preview .sb-col:hover .col-action{
-	top: 5px;
+	opacity: 1;
 }
 
 
-.nav-preview .sb-col .col-action span{
+.nav-preview .sb-row .col-action .col-settings-wrap{
+	width: 330px;
+	position: absolute;
+	top: 22px;
+	right: 0;
+	background: #007bff;
+	display: none;
+	padding: 7px;
+}
+
+.nav-preview .sb-row .col-settings:hover .col-settings-wrap{
+
+	display: block;
+}
+
+
+
+
+.nav-preview .sb-col .col-action .action-item{
 	display: inline-block;
 	background: #007bff;
 	padding: 3px 7px;
@@ -91,15 +151,50 @@
 	color: #fff;
 	font-size: 10px;
 	cursor: pointer;
+	position: relative;
 }
 
 
 .nav-preview .sb-col{
 	background: #f1f1f1;
 	position: relative;
-	overflow: hidden;
 
 }
+
+
+
+.nav-preview .input-wrap{
+	padding: 5px;
+	font-size: 12px;
+}
+
+.nav-preview .input-wrap.full{
+	display: block;
+}
+
+
+.nav-preview .input-wrap.half{
+	display: inline-block;
+	width: 49%;
+
+}
+
+.nav-preview .input-wrap label{
+	display: block;
+}
+
+.nav-preview .input-wrap input[type="text"]{
+	width: 100%;
+}
+
+
+
+
+
+
+
+
+
 
 
 
