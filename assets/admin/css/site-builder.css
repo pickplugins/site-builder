@@ -27,6 +27,29 @@
 	padding: 0px 10px;
 }
 
+.nav-tools .accoridon{}
+
+
+.nav-tools .accoridon .group-title{
+	background: #f5f5f5;
+	padding: 3px 7px;
+	font-size: 13px;
+	margin-bottom: 1px;
+	cursor: pointer;
+}
+.nav-tools .accoridon .group-content{
+
+}
+
+
+
+
+
+
+
+
+
+
 
 .nav-preview{
 	width: auto;
@@ -41,11 +64,17 @@
 }
 
 
+.nav-preview .sb-container.active{
+	background: #007bff;
+}
 
+.nav-preview .sb-row.active{
+	background: #5b9dd9;
+}
 
-
-
-
+.nav-preview .sb-col.active{
+	border: 1px dashed #007bff;
+}
 
 
 

@@ -41,6 +41,54 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             </div>
 
             <div class="section">
+                <div class="sec-title">Elements</div>
+                <div class="sec-inner">
+                    <div class="elements-list accoridon">
+                    <template v-for="(element_group, index) in elements">
+                        <template v-for="(group_data, group_data_key) in element_group">
+                            <template v-for="(group, group_key) in group_data">
+
+                                <div :index="group_data_key" :class="['group-title']" @click="accordionToggleClass(group_data_key)" >
+                                    {{group.groupName}}
+                                </div>
+                                <div class="group-content" >
+
+                                    <template class="" v-for="(item, item_key) in group.items">
+
+                                        <span :itemKey="group_data_key" v-for="(item_data, item_data_key) in item" class="button" @click="addElement(group_data_key, item_data_key)"> {{ item_data.name }}</span>
+
+                                    </template>
+
+
+                                </div>
+
+                            </template>
+
+
+
+                        </template>
+
+
+                    </template>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="section">
                 <div class="sec-inner">
                     <p>Container: {{selectedContainer}}</p>
                     <p>Row: {{selectedRow}}</p>
@@ -57,10 +105,10 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
             <template class="" v-for="(container, i) in containers">
-                <div :index="i" :class="[container.class, container.margin, container.padding]" class="" @click="selectContainer(i)">
+                <div :index="i" :class="[container.class, container.margin, container.padding, isActiveContainer(i)]" @click="selectContainer(i)">
 
                     <template class="" v-for="(row, j) in container.rows">
-                        <div :index="j" :class="[row.class, row.margin, row.padding]" @click="selectRow(i,j)">
+                        <div :index="j" :class="[row.class, row.margin, row.padding, isActiveRow(i,j)]" @click="selectRow(i,j)">
                             <div class="row-action">
         <!--                        <div title="Delete Row" class="action-item sort"><i class="fas fa-bars"></i></div>-->
                                 <div title="Add Column" class="action-item add-column-local" @click="addColumn(i,j)"><i class="fas fa-columns"></i></div>
@@ -87,7 +135,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                             </div>
 
                             <template class="" v-for="(column, k) in row.columns" >
-                                <div :index="k" :class="[column.class, column.margin, column.padding]" @click="selectColumn(i,j,k)" >
+                                <div :index="k" :class="[column.class, column.margin, column.padding, isActiveColumn(i,j,k)]" @click="selectColumn(i,j,k)" >
                                     <div class="col-action">
         <!--                                <div class="sort action-item"><i class="fas fa-bars"></i></div>-->
                                         <div title="Delete Column" class="remove action-item" @click="removeColumn(i,j,k)" ><i class="fas fa-times"></i></div>
@@ -114,7 +162,13 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
                                     </div>
                                     <h3>{{ i }} : {{ j }} : {{ k }}</h3>
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.
+
+                                    <div :class="['sb-element']" v-for="item in column.items">
+
+
+                                        {{item.item_data_key}}
+                                    </div>
+                                    Lorem Ipsum is simply dummy text
 
 
                                 </div>
@@ -154,6 +208,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             selectedRow: [0,0],
             selectedColumn: [0,0,0],
 
+
             containers: [{
                 class: 'sb-container container py-1 my-1',
                 rows: [{
@@ -165,12 +220,79 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                         margin: 'm-1',
                         padding: 'p-1',
                         items: [{}],
+                    }]
+                }],
+
+            }],
+
+
+
+
+
+
+            elements: [{
+                post: [{
+                    groupName: 'Post',
+                    items: [{
+                        postTitle:{name: "Post Title"},
+                        postExcerpt:{name: "Post excerpt"},
+                        postContent:{name: "Post Content"},
+                        readMore:{name: "Read more"},
+                        featuredImage:{name: "Featured image"},
+                        postDate:{name: "Post date"},
+                        authorAvatar:{name: "Author avatar"},
+                        author:{name: "Author"},
+                        categories:{name: "Post categories"},
+                        tags:{name: "Post tags"},
+                        commentsCount:{name: "Comments count"},
+                        customField:{name: "Custom Field"},
+                        customTaxonomy:{name: "Custom taxonomy"},
+                        postComments:{name: "Post comments"},
+
+
+
+
+                    }]
+
+                }],
+
+                woocommerce: [{
+                    groupName: 'WooCommerce',
+                    items: [{
+
+                        wcFullPrice:{name: "Product full price"},
+                        wcRegularPrice:{name: "Regular price"},
+                        wcSalePrice:{name: "Sale price"},
+                        wcProductGallery:{name: "Product gallery"},
+                        wcAddtoCart:{name: "Add to cart"},
+                        wcStarRating:{name: "Star rating"},
+                        wcTextRating:{name: "Text rating"},
+                        wcCategories:{name: "Product categories"},
+                        wcTags:{name: "Product tags"},
+                        wcSKU:{name: "Product SKU"},
+                        wcCategoryThumbnail:{name: "Category Thumbnail"},
+                        wcCategoryDescription:{name: "Category description"},
+
+                    }]
+
+                }],
+
+
+                others: [{
+                    groupName: 'Others',
+                    items: [{
+
+                        HTML:{name: "Custom HTML"},
+
 
                     }]
 
                 }],
 
             }],
+
+            columnElements: [{}],
+
 
         },
         methods:{
@@ -185,12 +307,80 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
             },
 
+            accordionToggleClass: function(group_key){
+
+                console.log(group_key);
+            },
+
+
+
+
+
+
+
+
+
+            addElement: function(group_key, item_data_key){
+
+               i = this.selectedColumn[0];
+                j = this.selectedColumn[1];
+                k = this.selectedColumn[2];
+
+                this.containers[i].rows[j].columns[k].items.push({item_data_key})
+
+
+                console.log(this.containers);
+
+            },
+
+
+
+
+            isActiveContainer: function(i){
+
+                if(this.selectedContainer == i){
+                    return 'active';
+                }
+            },
+
+            isActiveRow: function(i,j){
+
+                if(this.selectedContainer == i){
+
+                   // console.log(this.selectedRow[1]);
+
+                    if(this.selectedRow[1] == j){
+                        return 'active';
+                    }
+
+
+                }
+            },
+
+            isActiveColumn: function(i,j,k){
+
+                if(this.selectedContainer == i){
+
+
+                    if(this.selectedRow[1] == j){
+
+                        if(this.selectedColumn[2] == k){
+                            return 'active';
+                        }
+
+                    }
+
+
+                }
+            },
+
+
+
+
+
 
 
             addContainer: function(i){
-
-
-
 
                 this.containers.push({
                     class: 'sb-container container py-1 my-1',
@@ -233,9 +423,6 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
             },
             addColumn: function(i,j){
-
-                console.log(i);
-                console.log(j);
 
                 this.containers[i].rows[j].columns.push({
 
