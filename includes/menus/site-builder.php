@@ -106,6 +106,24 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
             <template class="" v-for="(container, i) in containers">
                 <div :index="i" :class="[container.class, container.margin, container.padding, isActiveContainer(i)]" @click="selectContainer(i)">
+                    <div class="container-action">
+                        <!--                        <div title="Delete Row" class="action-item sort"><i class="fas fa-bars"></i></div>-->
+                        <div title="Add Row" class="action-item add-row-local" @click="addRow(selectedContainer)"><i class="fas fa-layer"></i></div>
+                        <div title="Delete Container" class="action-item remove" @click="removeContainer(i)" ><i class="fas fa-times"></i></div>
+                        <div title="Container Settings" class="action-item container-settings">
+                            <i class="fas fa-cog"></i>
+
+                            <div class="container-settings-wrap">
+                                <div class="input-wrap full">
+                                    <label>Container Class</label>
+                                    <input type="text" value="10px" v-model="container.class">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <template class="" v-for="(row, j) in container.rows">
                         <div :index="j" :class="[row.class, row.margin, row.padding, isActiveRow(i,j)]" @click="selectRow(i,j)">
@@ -210,7 +228,10 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
             containers: [{
-                class: 'sb-container container py-1 my-1',
+                class: 'sb-container container',
+                margin: 'my-1',
+                padding: 'py-1',
+
                 rows: [{
                     class: 'sb-row row',
                     margin: 'm-1',
@@ -383,7 +404,10 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             addContainer: function(i){
 
                 this.containers.push({
-                    class: 'sb-container container py-1 my-1',
+                    class: 'sb-container container',
+                    margin: 'my-1',
+                    padding: 'py-1',
+
                     rows: [{
                         class: 'sb-row row',
                         margin: 'm-1',
@@ -453,6 +477,10 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             selectRow: function(i,j){
 
                 this.selectedRow = [i,j];;
+            },
+
+            removeContainer: function(i){
+                this.containers.splice(i, 1)
             },
 
             removeRow: function(i,j){
