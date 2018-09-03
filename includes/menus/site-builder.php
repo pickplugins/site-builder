@@ -34,7 +34,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             <div class="section">
                 <div class="sec-title">Column & Row</div>
                 <div class="sec-inner">
-                    <div class="add-container button" @click="addContainer">Add Container</div>
+                    <div class="add-container button" @click="addContainer()">Add Container</div>
                     <div class="add-row button" @click="addRow(selectedContainer)">Add Row</div>
                     <div class="add-column button" @click="addColumn(selectedRow[0],selectedRow[1])">Add Column</div>
                 </div>
@@ -45,29 +45,22 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 <div class="sec-inner">
                     <div class="elements-list accoridon">
                     <template v-for="(element_group, index) in elements">
-                        <template v-for="(group_data, group_data_key) in element_group">
-                            <template v-for="(group, group_key) in group_data">
 
-                                <div :index="group_data_key" :class="['group-title']" @click="accordionToggleClass(group_data_key)" >
-                                    {{group.groupName}}
-                                </div>
-                                <div class="group-content" >
+                        <div :class="[accordionIsActive, 'accoridonGroup']" >
+                            <div :index="index" :class="['group-title']" @click="accordionToggleClass()" >
+                                {{element_group.groupName}}
+                            </div>
+                            <div class="group-content" >
 
-                                    <template class="" v-for="(item, item_key) in group.items">
+                                <template class="" v-for="(item, item_key) in element_group.items">
 
-                                        <span :itemKey="group_data_key" v-for="(item_data, item_data_key) in item" class="button" @click="addElement(group_data_key, item_data_key)"> {{ item_data.name }}</span>
+                                    <span :itemKey="item_key" class="button" @click="addElement(element_group.groupKey, item_key)"> {{ item.name }}</span>
 
-                                    </template>
-
-
-                                </div>
-
-                            </template>
+                                </template>
 
 
-
-                        </template>
-
+                            </div>
+                        </div>
 
                     </template>
 
@@ -108,7 +101,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 <div :index="i" :class="[container.class, container.margin, container.padding, isActiveContainer(i)]" @click="selectContainer(i)">
                     <div class="container-action">
                         <!--                        <div title="Delete Row" class="action-item sort"><i class="fas fa-bars"></i></div>-->
-                        <div title="Add Row" class="action-item add-row-local" @click="addRow(selectedContainer)"><i class="fas fa-layer"></i></div>
+                        <div title="Add Row" class="action-item add-row-local" @click="addRow(selectedContainer)"><i class="far fa-object-ungroup"></i></div>
                         <div title="Delete Container" class="action-item remove" @click="removeContainer(i)" ><i class="fas fa-times"></i></div>
                         <div title="Container Settings" class="action-item container-settings">
                             <i class="fas fa-cog"></i>
@@ -179,14 +172,64 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                         </div>
 
                                     </div>
-                                    <h3>{{ i }} : {{ j }} : {{ k }}</h3>
+<!--                                    <h3>{{ i }} : {{ j }} : {{ k }}</h3>-->
 
                                     <div :class="['sb-element']" v-for="item in column.items">
 
+                                        <div class="element-action">
+                                            <div title="Element Settings" class="action-item"  ><i class="fas fa-cog"></i></div>
+                                        </div>
 
-                                        {{item.item_data_key}}
+
+
+                                        <template v-if="item.key=='image'">
+
+                                            <div class=" sb-image">
+                                                <img :style="{width:item.width,height:item.height}" :src="item.src"/>
+                                            </div>
+
+
+
+                                            <input type="text" v-model="item.src">
+
+                                        </template>
+
+                                        <template v-if="item.key=='video'">
+
+                                            <div class="">Video HTML</div>
+
+                                        </template>
+
+                                        <template v-if="item.key=='button'">
+
+                                            <div class="sb-button">
+                                                <a :href="item.href">{{item.buttonText}}</a>
+                                            </div>
+
+                                            <input type="text" v-model="item.buttonText">
+                                            <input type="text" v-model="item.href">
+
+                                        </template>
+
+                                        <template v-if="item.key=='heading'">
+
+                                            <div class="sb-button">Heading HTML</div>
+
+                                        </template>
+
+
+
+
+
+
+
+
+
+
+
+
                                     </div>
-                                    Lorem Ipsum is simply dummy text
+
 
 
                                 </div>
@@ -203,10 +246,15 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
         </div>
 
+        <pre>{{containers}}</pre>
 
     </div>
 
+
+
+
 </div>
+
 
 
 
@@ -225,7 +273,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             selectedContainer: 0,
             selectedRow: [0,0],
             selectedColumn: [0,0,0],
-
+            accordionIsActive: '',
 
             containers: [{
                 class: 'sb-container container',
@@ -240,7 +288,12 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                         class: 'sb-col col',
                         margin: 'm-1',
                         padding: 'p-1',
-                        items: [{}],
+                        items: [
+                            {key:"button", name: "Button", isLink:"yes", href:"https://www.youtube.com", target:"_blank", buttonText:"Button Text", buttonIcon:"Icons"},
+                            {key:"button", name: "Button", isLink:"yes", href:"https://www.youtube.com", target:"_blank", buttonText:"Button Text", buttonIcon:"Icons"},
+                            {key:"button", name: "Button", isLink:"yes", href:"https://www.youtube.com", target:"_blank", buttonText:"Button Text", buttonIcon:"Icons"},
+
+                        ],
                     }]
                 }],
 
@@ -251,69 +304,25 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
 
-            elements: [{
-                post: [{
+            elements: {
+                post: {
                     groupName: 'Post',
-                    items: [{
-                        postTitle:{name: "Post Title"},
-                        postExcerpt:{name: "Post excerpt"},
-                        postContent:{name: "Post Content"},
-                        readMore:{name: "Read more"},
-                        featuredImage:{name: "Featured image"},
-                        postDate:{name: "Post date"},
-                        authorAvatar:{name: "Author avatar"},
-                        author:{name: "Author"},
-                        categories:{name: "Post categories"},
-                        tags:{name: "Post tags"},
-                        commentsCount:{name: "Comments count"},
-                        customField:{name: "Custom Field"},
-                        customTaxonomy:{name: "Custom taxonomy"},
-                        postComments:{name: "Post comments"},
+                    groupKey: 'post',
+                    items: {
+                        image:{key:"image", name: "Image", src:"https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?cs=srgb&dl=bloom-blossom-close-up-36764.jpg", width:"100%", height: "auto"},
+                        video:{key:"video",name: "Video"},
+                        button:{key:"button", name: "Button", isLink:"yes", href:"https://www.youtube.com", target:"_blank", buttonText:"Button Text", buttonIcon:"Icons"},
+                        heading:{key:"heading",name: "Heading", content:"This is Heading"},
 
 
 
 
-                    }]
+                    }
 
-                }],
-
-                woocommerce: [{
-                    groupName: 'WooCommerce',
-                    items: [{
-
-                        wcFullPrice:{name: "Product full price"},
-                        wcRegularPrice:{name: "Regular price"},
-                        wcSalePrice:{name: "Sale price"},
-                        wcProductGallery:{name: "Product gallery"},
-                        wcAddtoCart:{name: "Add to cart"},
-                        wcStarRating:{name: "Star rating"},
-                        wcTextRating:{name: "Text rating"},
-                        wcCategories:{name: "Product categories"},
-                        wcTags:{name: "Product tags"},
-                        wcSKU:{name: "Product SKU"},
-                        wcCategoryThumbnail:{name: "Category Thumbnail"},
-                        wcCategoryDescription:{name: "Category description"},
-
-                    }]
-
-                }],
+                },
 
 
-                others: [{
-                    groupName: 'Others',
-                    items: [{
-
-                        HTML:{name: "Custom HTML"},
-
-
-                    }]
-
-                }],
-
-            }],
-
-            columnElements: [{}],
-
+            },
 
         },
         methods:{
@@ -328,9 +337,22 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
             },
 
-            accordionToggleClass: function(group_key){
+            accordionToggleClass: function(){
 
-                console.log(group_key);
+
+
+
+                if(this.accordionIsActive == 'active'){
+                    this.accordionIsActive = '';
+
+                }else{
+
+                    this.accordionIsActive = 'active';
+                }
+
+
+
+
             },
 
 
@@ -341,16 +363,18 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
 
-            addElement: function(group_key, item_data_key){
+            addElement: function(groupKey, item_key){
 
-               i = this.selectedColumn[0];
+                i = this.selectedColumn[0];
                 j = this.selectedColumn[1];
                 k = this.selectedColumn[2];
 
-                this.containers[i].rows[j].columns[k].items.push({item_data_key})
+                this.containers[i].rows[j].columns[k].items.push(this.elements[groupKey].items[item_key])
 
 
-                console.log(this.containers);
+
+
+                console.log(this.elements[groupKey].items[item_key]);
 
             },
 
@@ -401,7 +425,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
 
-            addContainer: function(i){
+            addContainer: function(){
 
                 this.containers.push({
                     class: 'sb-container container',
@@ -416,7 +440,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                             class: 'sb-col col',
                             margin: 'm-1',
                             padding: 'p-1',
-                            items: [{}],
+                            items: [],
 
                         }]
 
@@ -429,7 +453,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
 
-            addRow: function(i,j){
+            addRow: function(i){
 
                 this.containers[i].rows.push({
                     class: 'sb-row row',
@@ -439,7 +463,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                         class: 'sb-col col',
                         margin: 'm-1',
                         padding: 'p-1',
-                        items: [{}],
+                        items: [],
 
                     }]
 
@@ -453,7 +477,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                     class: 'sb-col col',
                     margin: 'm-1',
                     padding: 'p-1',
-                    items: [{}],
+                    items: [],
 
                 })
 
