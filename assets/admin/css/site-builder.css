@@ -15,9 +15,10 @@
 
 .nav-tools .section{
 	padding: 0;
-  border-bottom: 1px solid #ddd;
-  display: block;
-  margin-bottom: 20px;
+	border-bottom: 1px solid #ddd;
+	display: block;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
 }
 .nav-tools .section .sec-title{
 	padding: 5px;
@@ -287,27 +288,27 @@
 
 
 
-.nav-preview .input-wrap{
+.input-wrap{
 	padding: 5px;
 	font-size: 12px;
 }
 
-.nav-preview .input-wrap.full{
+ .input-wrap.full{
 	display: block;
 }
 
 
-.nav-preview .input-wrap.half{
+ .input-wrap.half{
 	display: inline-block;
 	width: 49%;
 
 }
 
-.nav-preview .input-wrap label{
+ .input-wrap label{
 	display: block;
 }
 
-.nav-preview .input-wrap input[type="text"]{
+ .input-wrap input[type="text"], .input-wrap textarea{
 	width: 100%;
 }
 
@@ -343,13 +344,16 @@
 	display: inline-block;
 	background: #007bff;
 	padding: 3px 7px;
-	margin: 0 2px;
+	margin: 0 0px;
 	color: #fff;
 	font-size: 10px;
 	cursor: pointer;
 	position: relative;
 }
 
+.nav-preview .sb-element .element-action .action-item.remove{
+	background: #f53e00;
+}
 
 
 
