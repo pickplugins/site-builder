@@ -54,23 +54,20 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 </div>
             </div>
 
+            
             <div class="section" v-if="selectedElement.key">
                 <div class="sec-title">Edit Element: {{selectedElement.name}}</div>
                 <div class="sec-inner">
-
                     <div class="element-settings">
-
                         <template v-if="selectedElement.key == 'heading'">
                             <div class="input-wrap full">
                                 <label>Heading Text</label>
                                 <input type="text" v-model="selectedElement.text">
                             </div>
-
                             <div class="input-wrap full">
                                 <label>Font Size</label>
                                 <input type="text" v-model="selectedElement.fontSize">
                             </div>
-
                         </template>
 
                         <template v-if="selectedElement.key == 'paragraph'">
@@ -78,18 +75,11 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                 <label>Paragraph Text</label>
                                 <textarea type="text" v-model="selectedElement.text"></textarea>
                             </div>
-
                             <div class="input-wrap full">
                                 <label>Font Size</label>
                                 <input type="text" v-model="selectedElement.fontSize">
                             </div>
-
                         </template>
-
-
-
-
-
 
                         <template v-else-if="selectedElement.key == 'button'">
                             <div class="input-wrap full">
@@ -100,12 +90,10 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                 <label>Button Text</label>
                                 <input type="text" v-model="selectedElement.href">
                             </div>
-
                             <div class="input-wrap full">
                                 <label>Button Icon</label>
                                 <input type="text" v-model="selectedElement.buttonIcon">
                             </div>
-
                             <div class="input-wrap full">
                                 <label>Target</label>
                                 <input type="text" v-model="selectedElement.target">
@@ -117,25 +105,92 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                 <label>Heading Text</label>
                                 <input type="text" v-model="selectedElement.src">
                             </div>
-
                             <div class="input-wrap full">
                                 <label>Width</label>
                                 <input type="text" v-model="selectedElement.width">
                             </div>
-
                             <div class="input-wrap full">
                                 <label>Height</label>
                                 <input type="text" v-model="selectedElement.height">
                             </div>
-
                         </template>
-
-
                     </div>
-
-
                 </div>
             </div>
+
+
+            <div class="section" v-if="selectedContainerSettings.class">
+                <div class="sec-title">Container Settings</div>
+                <div class="sec-inner">
+                    <div class="column-settings">
+                        <template >
+                            <div class="input-wrap full">
+                                <label>Container Class</label>
+                                <input type="text"  v-model="selectedContainerSettings.class">
+                            </div>
+                            <div class="input-wrap half">
+                                <label>Container Margin Class</label>
+                                <input type="text"  v-model="selectedContainerSettings.margin">
+                            </div>
+                            <div class="input-wrap half">
+                                <label>Container Padding Class</label>
+                                <input type="text"  v-model="selectedContainerSettings.padding">
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" v-if="selectedRowSettings.class">
+                <div class="sec-title">Row Settings</div>
+                <div class="sec-inner">
+                    <div class="row-settings">
+                        <template >
+                            <div class="input-wrap full">
+                                <label>Row Class</label>
+                                <input type="text"  v-model="selectedRowSettings.class">
+                            </div>
+                            <div class="input-wrap half">
+                                <label>Row Margin Class</label>
+                                <input type="text"  v-model="selectedRowSettings.margin">
+                            </div>
+                            <div class="input-wrap half">
+                                <label>Row Padding Class</label>
+                                <input type="text"  v-model="selectedRowSettings.padding">
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" v-if="selectedColumnSettings.class">
+                <div class="sec-title">Column Settings</div>
+                <div class="sec-inner">
+
+                    <div class="column-settings">
+
+                        <template >
+                            <div class="input-wrap full">
+                                <label>Column Class</label>
+                                <input type="text"  v-model="selectedColumnSettings.class">
+                            </div>
+                            <div class="input-wrap half">
+                                <label>Column Margin Class</label>
+                                <input type="text"  v-model="selectedColumnSettings.margin">
+                            </div>
+                            <div class="input-wrap half">
+                                <label>Column Padding Class</label>
+                                <input type="text"  v-model="selectedColumnSettings.padding">
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
 
 <!--            <div class="section">-->
 <!--                <div class="sec-inner">-->
@@ -157,16 +212,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                         <!--                        <div title="Delete Row" class="action-item sort"><i class="fas fa-bars"></i></div>-->
                         <div title="Add Row" class="action-item add-row-local" @click="addRow(selectedContainer)"><i class="far fa-object-ungroup"></i></div>
                         <div title="Delete Container" class="action-item remove" @click="removeContainer(i)" ><i class="fas fa-times"></i></div>
-                        <div title="Container Settings" class="action-item container-settings">
-                            <i class="fas fa-cog"></i>
-
-                            <div class="container-settings-wrap">
-                                <div class="input-wrap full">
-                                    <label>Container Class</label>
-                                    <input type="text" v-model="container.class">
-                                </div>
-                            </div>
-                        </div>
+                        <div title="Container Settings" class="action-item container-settings" @click="containerSettings(i)"><i class="fas fa-cog"></i></div>
                     </div>
 
                     <template class="" v-for="(row, j) in container.rows">
@@ -175,24 +221,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
         <!--                        <div title="Delete Row" class="action-item sort"><i class="fas fa-bars"></i></div>-->
                                 <div title="Add Column" class="action-item add-column-local" @click="addColumn(i,j)"><i class="fas fa-columns"></i></div>
                                 <div title="Delete Row" class="action-item remove" @click="removeRow(i,j)" ><i class="fas fa-times"></i></div>
-                                <div title="Row Settings" class="action-item row-settings">
-                                    <i class="fas fa-cog"></i>
-
-                                    <div class="row-settings-wrap">
-                                        <div class="input-wrap full">
-                                            <label>Row Class</label>
-                                            <input type="text"  v-model="row.class">
-                                        </div>
-                                        <div class="input-wrap half">
-                                            <label>Column Margin Class</label>
-                                            <input type="text"  v-model="row.margin">
-                                        </div>
-                                        <div class="input-wrap half">
-                                            <label>Column Padding Class</label>
-                                            <input type="text"  v-model="row.padding">
-                                        </div>
-                                    </div>
-                                </div>
+                                <div title="Row Settings" class="action-item row-settings" @click="rowSettings(i,j)"><i class="fas fa-cog"></i></div>
                             </div>
 
                             <template class="" v-for="(column, k) in row.columns" >
@@ -201,24 +230,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
         <!--                                <div class="sort action-item"><i class="fas fa-bars"></i></div>-->
                                         <div title="Delete Column" class="remove action-item" @click="removeColumn(i,j,k)" ><i class="fas fa-times"></i></div>
                                         <div title="Duplicate Column" class="duplicate-column action-item" @click="duplicateColumn(i,j,k)" ><i class="fas fa-clone"></i></div>
-                                        <div title="Column Settings" class="action-item col-settings">
-                                            <i class="fas fa-cog"></i>
-
-                                            <div class="col-settings-wrap">
-                                                <div class="input-wrap full">
-                                                    <label>Column Class</label>
-                                                    <input type="text"  v-model="column.class">
-                                                </div>
-                                                <div class="input-wrap half">
-                                                    <label>Column Margin Class</label>
-                                                    <input type="text"  v-model="column.margin">
-                                                </div>
-                                                <div class="input-wrap half">
-                                                    <label>Column Padding Class</label>
-                                                    <input type="text"  v-model="column.padding">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div title="Column Settings" class="action-item col-settings" @click="columnSettings(i,j,k)"><i class="fas fa-cog"></i></div>
                                     </div>
 
 
@@ -231,7 +243,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                         </div>
                                         <template v-if="columnElement.key == 'button'">
                                             <div class="sb-button">
-                                                <a :href="columnElement.href">{{columnElement.buttonText}}</a>
+                                                <a :class="[columnElement.class]" :href="columnElement.href">{{columnElement.buttonText}}</a>
                                             </div>
                                         </template>
                                         <template v-else-if="columnElement.key == 'heading'">
@@ -265,16 +277,6 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                         </template>
 
 
-
-
-
-
-
-
-
-
-
-
                                     </div>
                                 </div>
                             </template>
@@ -300,9 +302,14 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 index:'',
             }],
 
+            selectedObject: "",
             selectedContainer: 0,
+            selectedContainerSettings: [],
             selectedRow: [0,0],
+            selectedRowSettings: [],
             selectedColumn: [0,0,0],
+            selectedColumnSettings: [],
+
             selectedElement: [],
             accordionIsActive: '',
 
@@ -334,7 +341,6 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                         button:{key:"button", name: "Button"},
                         heading:{key:"heading",name: "Heading"},
                         paragraph:{key:"paragraph",name: "Paragraph"},
-                        logo:{key:"logo", name: "Logo"},
 
                     }
                 },
@@ -373,7 +379,32 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 }else if(item_key == "image"){
                     var element_data = {key:"image", name: "Image", src:"https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?cs=srgb&dl=bloom-blossom-close-up-36764.jpg", width:"100%", height: "auto"};
                 }else if(item_key == "button"){
-                    var element_data = {key:"button", name: "Button", isLink:"yes", href:"https://www.youtube.com", target:"_blank", buttonText:"Button Text", buttonIcon:"Icons"};
+                    var element_data = {
+                        key:"button",
+                        name: "Button",
+                        class:"btn btn-primary",
+                        style:{
+                            idle:{
+                                display:"inline-block",
+                                padding:{top:"10px",right:"10px",bottom:"10px",left:"10px"},
+                                margin:{top:"0px",right:"0px",bottom:"0px",left:"0px"},
+                                backgroundColor:"#007bff",
+                                border:{top:"",right:"",bottom:"",left:""},
+                            },
+                            hover:{
+                                display:"inline-block",
+                                padding:{top:"10px",right:"10px",bottom:"10px",left:"10px"},
+                                margin:{top:"0px",right:"0px",bottom:"0px",left:"0px"},
+                                backgroundColor:"#007bff",
+                                border:{top:"",right:"",bottom:"",left:""},
+                            },
+
+                        },
+                        isLink:"yes",
+                        href:"https://www.youtube.com",
+                        target:"_blank",
+                        buttonText:"Button Text",
+                        buttonIcon:"Icons"};
                 }else if(item_key == "heading"){
                     var element_data = {key:"heading", name: "Heading", text:"This is Heading", fontSize:"28px"};
                 }else if(item_key == "logo"){
@@ -483,26 +514,28 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
 
 
-
-
-
-
-
-
             getUniqueId: function(){
                 return new Date().getTime();
             },
 
             selectContainer: function(i){
                 this.selectedContainer = i;
+
+                this.selectedObject = "container";
+
+                console.log('selectContainer');
+
             },
 
             selectRow: function(i,j){
-                this.selectedRow = [i,j];;
+                this.selectedRow = [i,j];
+                this.selectedObject = "row";
+
+                console.log('selectRow');
             },
 
             removeContainer: function(i){
-                this.containers.splice(i, 1)
+                this.containers.splice(i, 1);
             },
 
             removeRow: function(i,j){
@@ -511,19 +544,39 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             selectColumn: function(i,j,k){
 
                 this.selectedColumn = [i,j,k];
+
+                this.selectedObject = "column";
+
+                console.log('selectColumn');
             },
             selectElement: function(i,j,k, elementIndex){
-                console.log(i);
-                console.log(j);
-                console.log(k);
-                console.log(elementIndex);
-
-                target = this.containers[i].rows[j].columns[k].columnElements[elementIndex];
-
+                var target = this.containers[i].rows[j].columns[k].columnElements[elementIndex];
                 this.selectedElement = target;
+                this.selectedObject = "element";
 
-
+                console.log('selectElement');
             },
+
+            rowSettings: function(i,j){
+               var target = this.containers[i].rows[j];
+                this.selectedRowSettings = target;
+            },
+
+            columnSettings: function(i,j,k){
+
+               var  target = this.containers[i].rows[j].columns[k];
+                this.selectedColumnSettings = target;
+            },
+
+            containerSettings: function(i){
+
+              var  target = this.containers[i];
+                this.selectedContainerSettings = target;
+            },
+
+
+
+
 
 
 
@@ -531,7 +584,10 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 this.containers[i].rows[j].columns.splice(k, 1)
             },
             deleteElement: function(i,j,k,elementIndex){
-                this.containers[i].rows[j].columns[k].columnElements.splice(elementIndex, 1)
+                this.containers[i].rows[j].columns[k].columnElements.splice(elementIndex, 1);
+
+                this.selectedElement = [];
+
             },
 
 

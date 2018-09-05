@@ -106,7 +106,7 @@
 
 
 .nav-preview .sb-container.active:hover .container-action{
-	display: none;
+	display: block;
 }
 
 .nav-preview .sb-container .container-action{
@@ -133,26 +133,6 @@
 	cursor: pointer;
 	position: relative;
 }
-
-.nav-preview .sb-container .container-action .container-settings-wrap{
-	width: 350px;
-	position: absolute;
-	top: 21px;
-	left: 0;
-	background: #007bff;
-	display: none;
-	padding: 7px;
-}
-
-.nav-preview .sb-container.active .container-settings:hover .container-settings-wrap{
-
-	display: block;
-}
-
-
-
-
-
 
 /*Row*/
 
@@ -201,29 +181,6 @@
 }
 
 
-
-
-.nav-preview .sb-row .row-action .row-settings-wrap{
-	width: 350px;
-	position: absolute;
-	top: 21px;
-	left: 0;
-	background: #007bff;
-	display: none;
-	padding: 7px;
-}
-
-.nav-preview .sb-row.active .row-settings:hover .row-settings-wrap{
-
-	display: block;
-}
-
-
-
-
-
-
-
 .nav-preview .sb-col .col-action{
 	position: absolute;
 	top: -35px;
@@ -241,23 +198,6 @@
 .nav-preview .sb-col.active:hover .col-action{
 	display: block;
 }
-
-
-.nav-preview .sb-row .col-action .col-settings-wrap{
-	width: 330px;
-	position: absolute;
-	top: 22px;
-	right: 0;
-	background: #007bff;
-	display: none;
-	padding: 7px;
-}
-
-.nav-preview .sb-row.active .col-settings:hover .col-settings-wrap{
-	display: block;
-}
-
-
 
 
 .nav-preview .sb-col .col-action .action-item{
