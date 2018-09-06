@@ -14,16 +14,16 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 <div class="wrap">
     <div class="site-builder" id="site-builder">
         <div class="nav-tools">
-<!--            <div class="section">-->
-<!--                <div class="sec-title">Main Parts</div>-->
-<!--                <div class="sec-inner">-->
-<!--                    <div class="button" @click="addHeader">Header</div>-->
-<!--                    <div class="button" @click="addFooter">Footer</div>-->
-<!--                    <div class="button" @click="addSidebar">Sidebar</div>-->
-<!--                    <div class="button" @click="addMenu">Menu</div>-->
-<!---->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="section">
+                <div class="sec-title">Main Parts</div>
+                <div class="sec-inner">
+                    <div class="button" @click="addHeader">Header</div>
+                    <div class="button" @click="addFooter">Footer</div>
+                    <div class="button" @click="addSidebar">Sidebar</div>
+                    <div class="button" @click="addMenu">Menu</div>
+
+                </div>
+            </div>
 
             <div class="section">
                 <div class="sec-title">Column & Row</div>
@@ -54,7 +54,7 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 </div>
             </div>
 
-            
+
             <div class="section" v-if="selectedElement.key">
                 <div class="sec-title">Edit Element: {{selectedElement.name}}</div>
                 <div class="sec-inner">
@@ -69,6 +69,81 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                 <input type="text" v-model="selectedElement.fontSize">
                             </div>
                         </template>
+
+                        <template v-if="selectedElement.key == 'logo'">
+
+                            <div class="input-wrap full">
+                                <label>Logo Type</label>
+                                <select v-model="selectedElement.logoType">
+                                    <option value="image">Image</option>
+                                    <option value="text">Text</option>
+                                    <option value="textLinked">Linked Text</option>
+                                    <option value="imageLinked">Linked Image</option>
+                                    <option value="imageText">Image & Text</option>
+                                    <option value="imageText">Image & Text</option>
+                                    <option value="imageTextLinked">Image & Text Linked</option>
+                                </select>
+                            </div>
+
+
+                        </template>
+
+                        <template v-if="selectedElement.key == 'sidebar'">
+                            <div class="input-wrap full">
+                                <label>Sidebar Id</label>
+                                <?php
+                                global $wp_registered_sidebars;
+                                ?>
+                                <select v-model="selectedElement.sidebarId">
+                                    <?php
+                                    if(!empty($wp_registered_sidebars)):
+                                        ?>
+                                        <option value="">Choose Sidebar</option>
+                                        <?php
+                                        foreach ($wp_registered_sidebars as $sidebarid=>$sidebar){
+                                            ?>
+                                            <option value="<?php echo $sidebarid; ?>"><?php echo $sidebar['name']?></option>
+                                            <?php
+                                        }
+                                    endif;
+                                    ?>
+                                </select>
+
+                            </div>
+
+                        </template>
+
+                        <template v-if="selectedElement.key == 'menu'">
+                            <div class="input-wrap full">
+                                <label>Menu Id</label>
+                                <?php
+                                $menus = get_registered_nav_menus();
+
+                                ?>
+                                <select v-model="selectedElement.menuId">
+                                    <?php
+                                    if(!empty($menus)):
+                                        ?>
+                                        <option value="">Choose Menu</option>
+                                        <?php
+                                        foreach ($menus as $menuid=>$menu){
+                                            ?>
+                                            <option value="<?php echo $menuid; ?>"><?php echo $menu?></option>
+                                            <?php
+                                        }
+                                    endif;
+                                    ?>
+                                </select>
+
+                            </div>
+
+                        </template>
+
+
+
+
+
+
 
                         <template v-if="selectedElement.key == 'paragraph'">
                             <div class="input-wrap full">
@@ -246,6 +321,52 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                                                 <a :class="[columnElement.class]" :href="columnElement.href">{{columnElement.buttonText}}</a>
                                             </div>
                                         </template>
+
+                                        <template v-else-if="columnElement.key == 'sidebar'">
+                                            <div class="sb-sidebar" v-if="columnElement.sidebarId" >
+                                                {{columnElement.sidebarId}}
+
+                                            </div>
+                                            <div class="sb-sidebar" v-else="columnElement.sidebarId">
+                                                Please Choose Sidebar.
+                                            </div>
+                                        </template>
+
+                                        <template v-else-if="columnElement.key == 'logo'">
+                                            <div class="sb-logo" >
+                                                <template v-if="columnElement.logoType == 'image'">
+                                                   Logo
+
+                                                </template>
+
+
+
+                                            </div>
+
+
+
+
+
+
+
+
+                                        </template>
+
+
+
+
+
+                                        <template v-else-if="columnElement.key == 'menu'">
+                                            <div class="sb-sidebar" v-if="columnElement.menuId">
+                                                {{columnElement.menuId}}
+                                            </div>
+                                            <div class="sb-sidebar" v-else="columnElement.menuId">
+                                                Please Choose Menu.
+                                            </div>
+                                        </template>
+
+
+
                                         <template v-else-if="columnElement.key == 'heading'">
                                             <h2 class="sb-heading" :style="{'font-size':columnElement.fontSize}">
                                                 {{columnElement.text}}
@@ -286,14 +407,21 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             </template>
         </div>
 
+
         
     </div>
 </div>
 
+<?php
+
+
+
+//var_dump($wp_registered_sidebars_html);
+?>
+
+
+
 <script>
-
-
-
     var app = new Vue({
         el: '#site-builder',
         data: {
@@ -337,6 +465,9 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                     groupName: 'Post',
                     groupKey: 'post',
                     items: {
+                        sidebar:{key:"sidebar", name: "Sidebar"},
+                        menu:{key:"menu", name: "Menu"},
+                        logo:{key:"menu", name: "Logo"},
                         image:{key:"image", name: "Image"},
                         button:{key:"button", name: "Button"},
                         heading:{key:"heading",name: "Heading"},
@@ -376,7 +507,31 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
                 if(item_key == "video"){
                     var element_data = {key:"video", name: "Video"};
-                }else if(item_key == "image"){
+                }else if(item_key == "sidebar"){
+                    var element_data = {key:"sidebar", name: "Sidebar", sidebarId:"" };
+                }else if(item_key == "menu"){
+                    var element_data = {key:"menu", name: "Menu", menuId:"" };
+                }else if(item_key == "logo"){
+                    var element_data = {
+                        key: "logo", name: "Logo",
+                        logoType: "image", // image, text, imageLinked, textLinked, imageText, imageTextLinked
+                        logoText: {
+                            link: "https://cdn0.iconfinder.com",
+                            text: "Logo Text",
+                            color: "#000",
+                            fontSize: "20px",
+                        },
+                        logoImage: {
+                            link: "https://cdn0.iconfinder.com",
+                            src: "https://cdn0.iconfinder.com/data/icons/twitter-ui-flat/48/Twitter_UI-01-512.png",
+                            width: "60px",
+                        },
+                    }
+                }
+
+
+
+                else if(item_key == "image"){
                     var element_data = {key:"image", name: "Image", src:"https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?cs=srgb&dl=bloom-blossom-close-up-36764.jpg", width:"100%", height: "auto"};
                 }else if(item_key == "button"){
                     var element_data = {
