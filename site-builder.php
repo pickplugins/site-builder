@@ -63,7 +63,7 @@ class SiteBuilder{
 	public function declare_classes() {
 		
 		require_once( QA_PLUGIN_DIR . 'includes/classes/class-menus.php');
-
+        require_once( QA_PLUGIN_DIR . 'includes/classes/class-elements.php');
 		
 	}
 	

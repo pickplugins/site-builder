@@ -14,6 +14,16 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 <div class="wrap">
     <div class="site-builder" id="site-builder">
         <div class="nav-tools">
+
+
+
+
+
+
+
+
+
+
             <div class="section">
                 <div class="sec-title">Main Parts</div>
                 <div class="sec-inner">
@@ -34,13 +44,21 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
                 </div>
             </div>
 
+
+
             <div class="section">
                 <div class="sec-title">Elements</div>
                 <div class="sec-inner">
-                    <div class="elements-list accoridon">
+                    <div class="elements-list sb-accoridon">
                     <template v-for="(element_group, index) in elements">
-                        <div :class="[accordionIsActive, 'accoridonGroup']" >
-                            <div :index="index" :class="['group-title']" @click="accordionToggleClass()" >
+                        <div :index="index" :class="accordionClasses(index)">
+
+                            <div  :class="['group-title']">
+                                <span @click="toggleAccordion(index)">
+                                    <span class="toggleOn"><i class="fas fa-toggle-on"></i></span>
+                                    <span class="toggleOff"><i class="fas fa-toggle-off"></i></span>
+
+                                </span>
                                 {{element_group.groupName}}
                             </div>
                             <div class="group-content" >
@@ -408,20 +426,28 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
         </div>
 
 
+
+
         
     </div>
 </div>
 
 <?php
 
+$class_site_builder_elements = new class_site_builder_elements();
+$elements_group = $class_site_builder_elements->elements_group();
 
-
-//var_dump($wp_registered_sidebars_html);
+//var_dump($elements_group);
 ?>
 
 
 
 <script>
+
+
+
+
+
     var app = new Vue({
         el: '#site-builder',
         data: {
@@ -439,7 +465,8 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             selectedColumnSettings: [],
 
             selectedElement: [],
-            accordionIsActive: '',
+
+            isOpen: true,
 
             containers: [{
                 class: 'sb-container container',
@@ -461,9 +488,9 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             }],
 
             elements: {
-                post: {
-                    groupName: 'Post',
-                    groupKey: 'post',
+                general: {
+                    groupName: 'General',
+                    groupKey: 'general',
                     items: {
                         sidebar:{key:"sidebar", name: "Sidebar"},
                         menu:{key:"menu", name: "Menu"},
@@ -475,7 +502,26 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
 
                     }
                 },
+                woocommerce: {
+                    groupName: 'WooCommerce',
+                    groupKey: 'woocommerce',
+                    items: {
+                        sidebar:{key:"sidebar", name: "Sidebar"},
+                        menu:{key:"menu", name: "Menu"},
+                        logo:{key:"menu", name: "Logo"},
+                        image:{key:"image", name: "Image"},
+                        button:{key:"button", name: "Button"},
+                        heading:{key:"heading",name: "Heading"},
+                        paragraph:{key:"paragraph",name: "Paragraph"},
+
+                    }
+                },
+
+
             },
+        },
+        computed: {
+
         },
         methods:{
             addHeader: function(){
@@ -486,16 +532,22 @@ if ( ! defined('ABSPATH')) exit;  // if direct access
             },
             addMenu: function(){
             },
+            accordionClasses: function(index) {
+                console.log(index);
 
-            accordionToggleClass: function(){
-
-                if(this.accordionIsActive == 'active'){
-                    this.accordionIsActive = '';
-
-                }else{
-                    this.accordionIsActive = 'active';
-                }
+                return {
+                    'active': !this.isOpen,
+                };
             },
+            toggleAccordion: function(index) {
+
+                console.log(index);
+
+                this.isOpen = !this.isOpen;
+            },
+
+
+
 
             addElement: function(groupKey, item_key){
 

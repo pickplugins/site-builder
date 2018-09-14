@@ -20,6 +20,16 @@
 	margin-bottom: 20px;
 	padding-bottom: 20px;
 }
+
+.nav-tools .section:last-child{
+	padding-bottom: 0px;
+}
+
+
+
+
+
+
 .nav-tools .section .sec-title{
 	padding: 5px;
 	background: #ddd;
@@ -29,18 +39,46 @@
 	padding: 0px 10px;
 }
 
-.nav-tools .accoridon{}
+.nav-tools .sb-accoridon{}
 
 
-.nav-tools .accoridon .group-title{
+.nav-tools .sb-accoridon .group-title{
 	background: #f5f5f5;
-	padding: 3px 7px;
+	padding: 5px 7px;
 	font-size: 13px;
 	margin-bottom: 1px;
 	cursor: pointer;
 }
-.nav-tools .accoridon .group-content{
-	padding: 10px 0;
+
+.nav-tools .sb-accoridon .group-title .toggleOff{
+	display: none;
+}
+
+
+.nav-tools .sb-accoridon .active .group-title .toggleOff{
+	display: inline-block;
+}
+
+
+.nav-tools .sb-accoridon .active .group-title .toggleOn{
+	display: none;
+}
+
+
+
+.nav-tools .sb-accoridon .group-content{
+	padding: 10px;
+	display: none;
+	background: #ddd;
+}
+
+
+
+
+.nav-tools .sb-accoridon .active .group-content{
+	display: block;
+
+
 }
 
 .nav-tools .addElement{
